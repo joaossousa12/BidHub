@@ -1,8 +1,8 @@
-# lbaw2364
+# BidHub
 
 ### 1\. Installation
 
-Source code: https://git.fe.up.pt/lbaw/lbaw2324/lbaw2364
+Source code: https://github.com/joaossousa12/BidHub
 
 `docker run -it -p 8000:80 --name=lbaw2364 -e DB_DATABASE="lbaw2364" -e DB_SCHEMA="lbaw2364" -e DB_USERNAME="lbaw2364" -e DB_PASSWORD="bgVBEibu" git.fe.up.pt:5050/lbaw/lbaw2364/lbaw2364`
 
@@ -22,3 +22,5 @@ Source code: https://git.fe.up.pt/lbaw/lbaw2324/lbaw2364
 |------|----------|----------|
 | Auction Owner | antonio13@gmail.com | 12345678 |
 | Bidder | ana2@gmail.com | 12345678 |
+
+PS: .env and .env_product hidden due to confidencial content. 
