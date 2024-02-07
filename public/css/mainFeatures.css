@@ -1,0 +1,11 @@
+
+section#introduction, section#features, section#user-experience {
+    padding: 15px;
+    text-align: center; 
+}
+
+.feature {
+    background: #eaeaea;
+    padding: 20px;
+    margin-bottom: 20px;
+}

@@ -1,0 +1,644 @@
+openapi: 3.0.0
+
+info:
+  version: '1.0'
+  title: BidHUB
+  description: 'Web Resources Specification (A7) for BidHUB'
+  
+servers:
+  - url: https://lbaw2364.lbaw.fe.up.pt
+    description: Production server
+    
+externalDocs:
+ description: Find more info here.
+ url: https://git.fe.up.pt/lbaw/lbaw2324/lbaw2364/-/wikis/eap#a7-web-resources-specification
+
+
+tags:
+  - name: 'M01: Authentication'
+  - name: 'M02: User Profile'
+  - name: 'M03: Auction'
+  - name: 'M04: Administration'
+  - name: 'M05: Notifications'
+  - name: 'M06: Static Pages'
+    
+paths:
+
+  ############################################ AUTENTICATION ############################################
+
+  ######### LOGIN #########
+
+  /login:
+    get:
+      operationId: R101
+      summary: 'R101: Login Form'
+      description: 'Provide login form. Access: PUB'
+      tags:
+        - 'M01: Authentication'
+      responses:
+        '200':
+          description: 'Ok. Show Log-in UI'
+    post:
+      operationId: R102
+      summary: 'R102: Login Action'
+      description: 'Processes the login form submission. Access: PUB'
+      tags:
+        - 'M01: Authentication'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urllencoded:
+            schema:
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+              required:
+                - email
+                - password
+      responses:
+        '302':
+          description: 'Redirect after processing the login credentials.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful authentication. Redirect to HomePage.'
+                  value: '/home'
+                302Failure:
+                  description: 'Failed authentication. Redirect to login form.'
+                  value: '/login'
+  
+  ######### LOGOUT #########
+  
+  /logout:
+    get:
+      operationId: R103
+      summary: 'R103: Logout Action'
+      description: 'Logout the current user. Access: BID, OWN, ADM'
+      tags:
+        - 'M01: Authentication'
+      responses:
+        '302':
+          description: 'Redirect after processing logout.'
+          headers:
+            Location:
+              schema:
+                type: string
+              examples:
+                302Success:
+                  description: 'Successful authentication. Redirect to HomePage.'
+                  value: '/home'
+  
+  ######### REGISTER #########
+  
+  /register:
+    get:
+      operationId: R104
+      summary: 'R104: Register Form'
+      description: 'Provide new user registration form. Access: PUB'
+      tags:
+        - 'M01: Authentication'
+      responses:
+        '200':
+          description: 'Ok. Show Sign-Up UI'
+    post:
+      operationId: R105
+      summary: 'R105: Register Action'
+      description: 'Processes the new user registration form submission. Access: PUB'
+      tags:
+        - 'M01: Authentication'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+                confirm_password:
+                  type: string
+                  format: password
+              required:
+                - username
+                - name
+                - email
+                - password
+                - confirm_password;
+      responses:
+        '302':
+          description: 'Redirect after processing the new user information.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                  302Success:
+                    description: 'Successful authentication. Redirect to HomePage.'
+                    value: '/home'
+                  302Failure:
+                    description: 'Failed authentication. Redirect to register form.'
+                    value: '/register'
+  
+  ######### PASSWORD RECOVERY #########
+  
+    
+  /recoverPassword:
+    post:
+      operationId: R106
+      summary: 'R106: Recover Password Action'
+      description: 'Changes the current password after receiving the validation token. Access: PUB'
+      tags:
+        - 'M01: Authentication'
+
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                verify_password:
+                  type: string
+                  format: password
+              required:
+                - token
+                - password
+                - verify_password;
+
+      responses:
+        '200':
+          description: 'Success. Your password has been changed successfully.'
+        '404':
+          description: 'Error. Invalid token.'
+  
+  ############################################ USER PROFILE ############################################
+  
+  ######### VIEW PROFILE #########
+  
+  /user/{id}:
+    get:
+      operationId: R201
+      summary: 'R201: View user profile'
+      description: 'Show the individual user profile. Access: BID, OWN'
+      tags:
+        - 'M02: User Profile'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: True
+      responses:
+        '200':
+          description: 'Ok. Show User Profile UI'
+          
+        '302':
+          description: 'Redirect if user is not logged in or other user doesnt exist.'
+          headers:
+            Location:
+              schema:
+                type: string
+              example:
+                302Failure:
+                  description: 'Failure.'
+                  
+  /user/{id}/add:
+    post:
+      operationId: R202
+      summary: 'R202: Add user profile'
+      description: 'Add a new personal information. Access: BID, OWN'
+      tags:
+        - 'M02: User Profile'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+              required:
+                - username
+                - name
+                - email
+      responses:
+        '201':
+          description: 'User profile information added successfully.'
+        
+
+  /user/{id}/delete:
+    delete:
+      operationId: R203
+      summary: 'R203: Delete user profile'
+      description: 'Delete information from profile. Access: BID, OWN'
+      tags:
+        - 'M02: User Profile'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: 'User profile information deleted successfully.'
+        
+  /user/{id}/edit:
+    put:
+      operationId: R204
+      summary: 'R204: Edit user profile'
+      description: 'Edit an existing user profile. Access: BID, OWN'
+      tags:
+        - 'M02: User Profile'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+              required:
+                - username
+                - name
+                - email
+      responses:
+        '200':
+          description: 'User profile edited successfully.'
+        
+        
+  ############################################ AUCTION ############################################
+  
+  /auction/{id}:
+    get:
+      operationId: R301
+      summary: 'R301: View auction'
+      description: 'View details of a specific auction. Access: BID, OWN, ADM'
+      tags:
+        - 'M03: Auction'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Auction details retrieved successfully.'
+        
+        
+  /auctions/search:
+    get:
+      operationId: R302
+      summary: 'R302: Search auctions'
+      description: 'Search for auctions based on criteria. Access: PUB, BID, OWN, ADM'
+      tags:
+        - 'M03: Auction'
+      parameters:
+        - in: query
+          name: keyword
+          schema:
+            type: string
+          description: 'Keyword to search for auctions'
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: 'Category filter for auctions'
+      responses:
+        '200':
+          description: 'Auctions found based on search criteria.'
+        
+        
+  /auction/create:
+    post:
+      operationId: R303
+      summary: 'R303: Create auction'
+      description: 'Create a new auction. Access: OWN'
+      tags:
+        - 'M03: Auction'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                starting_price:
+                  type: number
+                category:
+                  type: string
+                start_time:
+                  type: string
+                  format: date-time
+                end_time:
+                  type: string
+                  format: date-time
+              required:
+                - title
+                - starting_price
+                - start_time
+                - end_time
+      responses:
+        '201':
+          description: 'Auction created successfully.'
+        
+        
+  /auction/{id}/moderate:
+    put:
+      operationId: R304
+      summary: 'R304: Moderate auction'
+      description: 'Moderate an existing auction. Access: ADM'
+      tags:
+        - 'M03: Auction'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+              required:
+                - status
+      responses:
+        '200':
+          description: 'Auction moderated successfully.'
+        
+        
+  /auction/{id}/bid:
+    post:
+      operationId: R305
+      summary: 'R305: Place a bid'
+      description: 'Place a bid on an auction. Access: BID'
+      tags:
+        - 'M03: Auction'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                amount:
+                  type: number
+              required:
+                - amount
+      responses:
+        '200':
+          description: 'Bid placed successfully.'
+        
+        
+  /auction/{id}/select_winner:
+    put:
+      operationId: R306
+      summary: 'R306: Select winner'
+      description: 'Select a winner for an auction. Access: ADM'
+      tags:
+        - 'M03: Auction'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Winner selected successfully.'
+          
+  ############################################ ADMINISTRATION ############################################
+  
+  /admin/user/{id}/ban:
+    put:
+      operationId: R401
+      summary: 'R401: Ban user'
+      description: 'Ban a user account. Access: ADM'
+      tags:
+        - 'M04: Administration'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'User banned successfully.'
+  
+  /admin/auction/{id}/approve:
+    put:
+      operationId: R402
+      summary: 'R402: Approve auction'
+      description: 'Approve an auction for public listing. Access: ADM'
+      tags:
+        - 'M04: Administration'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Auction approved successfully.'
+        
+  /admin/auction/{id}/remove:
+    delete:
+      operationId: R403
+      summary: 'R403: Remove auction'
+      description: 'Remove an auction from the system. Access: ADM'
+      tags:
+        - 'M04: Administration'
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '204':
+          description: 'Auction removed successfully.'
+    
+  /admin/static-pages/{page}:
+    put:
+      operationId: R404
+      summary: 'R404: Update static page'
+      description: 'Update the content of a static page. Access: ADM'
+      tags:
+        - 'M04: Administration'
+      parameters:
+        - in: path
+          name: page
+          schema:
+            type: string
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+              required:
+                - content
+      responses:
+        '200':
+          description: 'Static page updated successfully.'
+          
+  ############################################ NOTIFICATIONS ############################################
+
+  /notifications:
+    get:
+      operationId: R501
+      summary: 'R501: List notifications'
+      description: 'List user notifications. Access: BID, OWN'
+      tags:
+        - 'M05: Notifications'
+      responses:
+        '200':
+          description: 'Notifications retrieved successfully.'
+          
+  /notifications/mark-read:
+    put:
+      operationId: R502
+      summary: 'R502: Mark notifications as read'
+      description: 'Mark notifications as read for the user. Access: BID, ONW'
+      tags:
+        - 'M05: Notifications'
+      responses:
+        '200':
+          description: 'Notifications marked as read successfully.'
+          
+        
+  /messages/send:
+    post:
+      operationId: R503
+      summary: 'R503: Send a message'
+      description: 'Send a message to another user. Access: BID, OWN'
+      tags:
+        - 'M05: Notifications'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                recipient:
+                  type: string
+                message:
+                  type: string
+              required:
+                - recipient
+                - message
+      responses:
+        '201':
+          description: 'Message sent successfully.'
+          
+  /messages/{user_id}:
+    get:
+      operationId: R504
+      summary: 'R504: View exchanged messages'
+      description: 'View messages exchanged with another user. Access: BID, OWN'
+      tags:
+        - 'M05: Notifications'
+      parameters:
+        - in: path
+          name: user_id
+          schema:
+            type: integer
+          required: true
+      responses:
+        '200':
+          description: 'Messages retrieved successfully.'
+          
+  ############################################ STATIC PAGES ############################################
+  /static-pages/faq:
+    get:
+      operationId: R601
+      summary: 'R601: View FAQ Page'
+      description: 'View the FAQ page. Access: PUB'
+      tags:
+        - 'M06: Static Pages'
+      responses:
+        '200':
+          description: 'FAQ page retrieved successfully.'
+          
+  /static-pages/about:
+    get:
+      operationId: R602
+      summary: 'R602: View About Page'
+      description: 'View the About page. Access: PUB'
+      tags:
+        - 'M06: Static Pages'
+      responses:
+        '200':
+          description: 'About page retrieved successfully.'
+          
+  /static-pages/contact-us:
+    get:
+      operationId: R603
+      summary: 'R603: View Contact Us Page'
+      description: 'View the Contact Us page. Access: PUB'
+      tags:
+        - 'M06: Static Pages'
+      responses:
+        '200':
+          description: 'Contact Us page retrieved successfully.'

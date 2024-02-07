@@ -1,0 +1,236 @@
+body {
+    background-color: #EFEFEF;
+    color: #FE5520;
+  }
+  #content label {
+    font-weight: normal;
+  }
+  #content > form {
+    margin: 0 auto;
+    padding: 1em;
+    max-width: 20em;
+    border: 1px solid #FE5520;
+  }
+  #content > form .error {
+    font-weight: bold;
+    color: #ff3333;
+  }
+  #content > form .success {
+    font-weight: bold;
+    color: green;
+  }
+  #content > form input {
+    background-color: white;
+  }
+  @media (max-width: 70em) {
+    #cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    main > header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+    }
+    main > header h1 {
+      grid-row-end: span 2;
+    }
+  }
+  @media (max-width: 40em) {
+    #cards {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 25em) {
+    body {
+      margin: 0;
+    }
+    main > header {
+      margin: 0;
+      padding: 0.5em;
+    }
+    main > header span {
+      margin: 0;
+    }
+    #content form {
+      margin: 0;
+      max-width: 25em;
+    }
+    article.card {
+      margin: 0;
+      border-bottom: 1px solid rgba(96, 108, 118, 0.4);
+    }
+  }
+  #logout, #adminDashboard {
+    background-color: #FE5520;
+    border-color: #FE5520;
+  }
+  button {
+    background-color: #FE5520;
+    border-color: #FE5520;
+  }
+  a.button {
+    background-color: #FE5520;
+    border-color: #FE5520;
+  }
+  a.button.button-outline {
+    color: #FE5520;
+  }
+  a {
+    color: #FE5520;
+  }
+  input[type=text]:focus,
+  input[type=email]:focus,
+  input[type=password]:focus {
+    border-color: #FE5520;
+  }
+.image-container {
+    text-align: center; 
+}
+
+.image-container img {
+    max-width: 100%;  
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+p {
+  margin-top: 1em;
+  text-align: center;
+  color: black;
+}
+
+.auctions-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); 
+  gap: 20px; 
+  padding: 20px;
+  margin: 0 auto; 
+  max-width: 1200px; 
+  justify-content: center;
+}
+
+.auction-box {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.auction-details {
+  padding: 10px;
+}
+
+.auction-timing, .auction-bidding {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.bid-now {
+  padding: 5px 10px;
+  background-color: red;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.top-nav {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.nav-item {
+  margin: 0 10px;
+  padding: 10px;
+  background-color: #ddd; 
+  border-radius: 5px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.nav-item a {
+  color: inherit;
+  text-decoration: none; 
+  font-weight: bold;
+}
+
+header {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 0 1em; 
+}
+
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-right {
+    display: flex;
+    gap: 10px;
+}
+
+.top-nav .header-right {
+    margin-left: auto;
+    padding: 0;
+}
+
+
+.createAuctionButton {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  background-color: #FE5520; 
+  color: #ffffff; 
+  text-decoration: none;
+  border-radius: 5px; 
+  transition: background-color 0.3s ease; 
+}
+
+ul {
+  list-style-type: none;
+}
+
+/*
+.createAuctionButton:hover {
+  background-color:#606c76;
+  border-color:#606c76;
+  color:#fff;
+  outline:0
+}
+
+ul {
+  list-style-type: none;
+}
+
+.listt li {
+  list-style-type: none;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+  margin-bottom: 10px; 
+}
+
+.listt li:last-child {
+  border-bottom: none; 
+}
+
+.dropdown-menu {
+  min-width: 200px;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+}
+
+
+/*@media (min-width: 768px) {
+  .dropdown {
+      margin-top: 0;
+      text-align: center;
+  }
+}*/
